@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Brochure | Aashray Legacy Estate</title>
+<style>
+:root{--gold:#c9a96e;--ink:#14221c}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,Arial,sans-serif;color:#fff;background:#17251f}
+.backdrop{position:fixed;inset:-18px;z-index:-2;background:
+ url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=85") center/cover no-repeat;
+ filter:blur(9px);transform:scale(1.06)}
+.backdrop:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(5,18,13,.72),rgba(5,18,13,.46))}
+main{min-height:100vh;display:grid;place-items:center;padding:28px 16px}
+.panel{width:min(100%,460px);padding:32px;border:1px solid rgba(255,255,255,.36);border-radius:24px;background:rgba(255,255,255,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 24px 80px rgba(0,0,0,.28)}
+.brand{text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:#ead8b7;text-align:center}
+h1{font-family:Georgia,serif;font-size:clamp(30px,7vw,42px);line-height:1.08;text-align:center;margin:14px 0 10px}
+.sub{text-align:center;color:rgba(255,255,255,.86);line-height:1.5;margin:0 0 24px;font-size:14px}
+label{display:block;font-size:12px;font-weight:650;margin:0 0 7px;color:#fff}
+input,select{width:100%;height:48px;border:1px solid rgba(255,255,255,.42);border-radius:11px;padding:0 13px;background:rgba(255,255,255,.92);color:#1d2b24;font-size:15px;outline:none}
+.field{margin:0 0 15px}
+button{width:100%;height:52px;border:0;border-radius:12px;background:var(--gold);color:#17221b;font-size:15px;font-weight:800;cursor:pointer;margin-top:6px}
+button:disabled{opacity:.65;cursor:wait}
+.note{text-align:center;color:rgba(255,255,255,.75);font-size:11px;line-height:1.45;margin:14px 0 0}
+#status{min-height:20px;text-align:center;font-size:13px;margin-top:12px;color:#fff}
+.hp{position:absolute;left:-9999px}
+@media(max-width:420px){.panel{padding:25px 20px}}
+</style>
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"></div>
+<main>
+<section class="panel">
+  <div class="brand">Aashray Legacy Estate</div>
+  <h1>Discover Your Dream Property</h1>
+  <p class="sub">Share a few details to receive the project brochure.</p>
+  <form id="leadForm">
+    <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" placeholder="Enter your name" required maxlength="100"></div>
+    <div class="field"><label for="phone">Mobile number</label><input id="phone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" pattern="[6-9][0-9]{9}" maxlength="10" required></div>
+    <div class="field"><label for="budget">Your budget</label><select id="budget" name="budget" required><option value="">Select your budget</option><option>Below ₹20 Lakhs</option><option>₹20–40 Lakhs</option><option>₹40–60 Lakhs</option><option>₹60–80 Lakhs</option><option>₹80 Lakhs–1 Crore</option><option>Above ₹1 Crore</option></select></div>
+    <div class="field"><label for="location">Preferred location</label><select id="location" name="location" required><option value="">Select preferred location</option><option>Gomti Nagar</option><option>Sushant Golf City</option><option>Shaheed Path</option><option>Sultanpur Road</option><option>Bijnor Road</option><option>Other</option></select></div>
+    <div class="hp"><label>Leave this field empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <button id="submitBtn" type="submit">Get Brochure <span aria-hidden="true">↓</span></button>
+    <div id="status" role="status" aria-live="polite"></div>
+  </form>
+  <p class="note">By submitting, you agree that our team may contact you about this project. Your details are used for enquiry follow-up.</p>
+</section>
+</main>
+<script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvnXz6C8Z0k5Uo6UwzSrwBVBGGH76OK_ylnDxF4iXvXwv9bFM8szM1sNLES5M-wb8vhQ/exec";
+const PDF_URL = "https://drive.google.com/uc?export=download&id=1yX_zCzlf9KOdxzQxEzYjcO4e2GYeykoR";
+const form = document.getElementById("leadForm");
+const button = document.getElementById("submitBtn");
+const statusBox = document.getElementById("status");
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!form.reportValidity()) return;
+  if (form.elements.website.value) return; // basic honeypot
+  if (!APPS_SCRIPT_URL.startsWith("https://script.google.com/")) {
+    statusBox.textContent = "Setup required: add your Apps Script Web App URL.";
+    return;
+  }
+  const phone = form.elements.phone.value.trim();
+  if (!/^[6-9]\d{9}$/.test(phone)) {
+    statusBox.textContent = "Please enter a valid 10-digit Indian mobile number.";
+    return;
+  }
+  button.disabled = true;
+  button.textContent = "Submitting…";
+  statusBox.textContent = "Saving your details and preparing the brochure…";
+
+  const data = new URLSearchParams({
+    name: form.elements.name.value.trim(),
+    phone,
+    budget: form.elements.budget.value,
+    location: form.elements.location.value,
+    source: "Project brochure landing page"
+  });
+
+  try {
+    // Apps Script accepts this simple POST. no-cors prevents browser CORS
+    // restrictions; the response is intentionally opaque to this page.
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},
+      body: data.toString(),
+      keepalive: true
+    });
+    statusBox.textContent = "Thank you! Your brochure is opening.";
+    window.location.href = PDF_URL;
+  } catch (error) {
+    statusBox.textContent = "Could not submit right now. Please try again.";
+    button.disabled = false;
+    button.textContent = "Get Brochure ↓";
+  }
+});
+</script>
+</body>
+</html>
