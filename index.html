@@ -8,18 +8,27 @@
 :root{--gold:#c9a96e;--ink:#14221c}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;font-family:Inter,Arial,sans-serif;color:#fff;background:#17251f}
-.backdrop{position:fixed;inset:-18px;z-index:-2;background:
- url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=85") center/cover no-repeat;
- filter:blur(9px);transform:scale(1.06)}
+.backdrop{position:fixed;inset:-18px;z-index:-2;background:url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=85") center/cover no-repeat;filter:blur(9px);transform:scale(1.06)}
 .backdrop:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(5,18,13,.72),rgba(5,18,13,.46))}
 main{min-height:100vh;display:grid;place-items:center;padding:28px 16px}
 .panel{width:min(100%,460px);padding:32px;border:1px solid rgba(255,255,255,.36);border-radius:24px;background:rgba(255,255,255,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 24px 80px rgba(0,0,0,.28)}
-.brand{text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:#ead8b7;text-align:center}
+.brand{letter-spacing:.04em;font-size:13px;color:#ead8b7;text-align:center}
+.brand a{color:inherit;text-decoration:none}
+.brand a:hover,.brand a:focus-visible{text-decoration:underline}
 h1{font-family:Georgia,serif;font-size:clamp(30px,7vw,42px);line-height:1.08;text-align:center;margin:14px 0 10px}
-.sub{text-align:center;color:rgba(255,255,255,.86);line-height:1.5;margin:0 0 24px;font-size:14px}
+.sub{text-align:center;color:rgba(255,255,255,.86);line-height:1.5;margin:0 0 20px;font-size:14px}
+.preview{display:flex;align-items:center;gap:14px;width:min(100%,330px);margin:0 auto 24px;padding:9px;border:1px solid rgba(255,255,255,.3);border-radius:14px;background:rgba(0,0,0,.18)}
+.preview img{display:block;width:112px;height:76px;flex:none;object-fit:cover;border-radius:9px;filter:blur(2px);transform:scale(.97)}
+.preview-copy{font-size:12px;line-height:1.45;color:rgba(255,255,255,.9)}
+.preview-copy strong{display:block;margin-bottom:3px;color:#fff;font-size:13px}
 label{display:block;font-size:12px;font-weight:650;margin:0 0 7px;color:#fff}
-input,select{width:100%;height:48px;border:1px solid rgba(255,255,255,.42);border-radius:11px;padding:0 13px;background:rgba(255,255,255,.92);color:#1d2b24;font-size:15px;outline:none}
+input[type="text"],input[type="tel"]{width:100%;height:48px;border:1px solid rgba(255,255,255,.42);border-radius:11px;padding:0 13px;background:rgba(255,255,255,.92);color:#1d2b24;font-size:15px;outline:none}
 .field{margin:0 0 15px}
+fieldset{margin:0 0 17px;padding:0;border:0}
+legend{font-size:12px;font-weight:650;margin:0 0 8px;color:#fff}
+.choice-row{display:flex;gap:10px}
+.choice{flex:1;display:flex;align-items:center;gap:9px;min-height:46px;margin:0;padding:0 13px;border:1px solid rgba(255,255,255,.42);border-radius:11px;background:rgba(255,255,255,.92);color:#1d2b24;font-size:14px;font-weight:600;cursor:pointer}
+.choice input{width:16px;height:16px;margin:0;accent-color:#8d6b35}
 button{width:100%;height:52px;border:0;border-radius:12px;background:var(--gold);color:#17221b;font-size:15px;font-weight:800;cursor:pointer;margin-top:6px}
 button:disabled{opacity:.65;cursor:wait}
 .note{text-align:center;color:rgba(255,255,255,.75);font-size:11px;line-height:1.45;margin:14px 0 0}
@@ -32,16 +41,25 @@ button:disabled{opacity:.65;cursor:wait}
 <div class="backdrop" aria-hidden="true"></div>
 <main>
 <section class="panel">
-  <div class="brand">Aashray Legacy Estate</div>
-  <h1>Discover Your Dream Property</h1>
-  <p class="sub">Share a few details to receive the project brochure.</p>
+  <div class="brand">Call us for more: <a href="tel:+919278313581">+91 9278313581</a></div>
+  <h1>Download Project Details</h1>
+  <p class="sub">Share your details to receive the project brochure.</p>
+  <div class="preview" aria-label="Blurred brochure preview">
+    <img src="https://drive.google.com/thumbnail?id=17_CMNUP1DFkV6RrafIleGiCRhbMqKXFd&amp;sz=w640" alt="Blurred preview of the project brochure" loading="lazy">
+    <div class="preview-copy"><strong>Project brochure</strong>A preview of the brochure you’ll receive after submitting.</div>
+  </div>
   <form id="leadForm">
-    <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" placeholder="Enter your name" required maxlength="100"></div>
-    <div class="field"><label for="phone">Mobile number</label><input id="phone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" pattern="[6-9][0-9]{9}" maxlength="10" required></div>
-    <div class="field"><label for="budget">Your budget</label><select id="budget" name="budget" required><option value="">Select your budget</option><option>Below ₹20 Lakhs</option><option>₹20–40 Lakhs</option><option>₹40–60 Lakhs</option><option>₹60–80 Lakhs</option><option>₹80 Lakhs–1 Crore</option><option>Above ₹1 Crore</option></select></div>
-    <div class="field"><label for="location">Preferred location</label><select id="location" name="location" required><option value="">Select preferred location</option><option>Gomti Nagar</option><option>Sushant Golf City</option><option>Shaheed Path</option><option>Sultanpur Road</option><option>Bijnor Road</option><option>Other</option></select></div>
+    <div class="field"><label for="name">Full name</label><input type="text" id="name" name="name" autocomplete="name" placeholder="Enter your name" required maxlength="100"></div>
+    <div class="field"><label for="phone">Mobile number</label><input type="tel" id="phone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number" pattern="[6-9][0-9]{9}" maxlength="10" required></div>
+    <fieldset>
+      <legend>Would you like to visit?</legend>
+      <div class="choice-row">
+        <label class="choice"><input type="radio" name="visit" value="Yes" required>Yes</label>
+        <label class="choice"><input type="radio" name="visit" value="No" required>No</label>
+      </div>
+    </fieldset>
     <div class="hp"><label>Leave this field empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
-    <button id="submitBtn" type="submit">Get Brochure <span aria-hidden="true">↓</span></button>
+    <button id="submitBtn" type="submit">Get Brochure Now <span aria-hidden="true">↓</span></button>
     <div id="status" role="status" aria-live="polite"></div>
   </form>
   <p class="note">By submitting, you agree that our team may contact you about this project. Your details are used for enquiry follow-up.</p>
@@ -74,8 +92,7 @@ form.addEventListener("submit", async (event) => {
   const data = new URLSearchParams({
     name: form.elements.name.value.trim(),
     phone,
-    budget: form.elements.budget.value,
-    location: form.elements.location.value,
+    visit: form.elements.visit.value,
     source: "Project brochure landing page"
   });
 
@@ -94,7 +111,7 @@ form.addEventListener("submit", async (event) => {
   } catch (error) {
     statusBox.textContent = "Could not submit right now. Please try again.";
     button.disabled = false;
-    button.textContent = "Get Brochure ↓";
+    button.innerHTML = 'Get Brochure Now <span aria-hidden="true">↓</span>';
   }
 });
 </script>
